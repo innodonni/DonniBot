@@ -1,13 +1,10 @@
 package org.virgonet.adonikam.donnibot;
 
 import com.google.common.collect.ImmutableMap;
-import org.junit.Assert;
 import org.junit.Test;
 import org.pircbotx.*;
 import org.pircbotx.dcc.DccHandler;
 import org.pircbotx.exception.IrcException;
-import org.pircbotx.hooks.Event;
-import org.pircbotx.hooks.Listener;
 import org.pircbotx.output.OutputCAP;
 import org.pircbotx.output.OutputDCC;
 import org.pircbotx.output.OutputIRC;
@@ -19,6 +16,7 @@ import java.net.Socket;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class DonniBotTest
 {
@@ -26,7 +24,7 @@ public class DonniBotTest
     public void DonniBot_GivenCommandHi_RespondsWithHello()
     {
         //Arrange
-        IDonniBot donniBot = createDonniBot();
+        ITwitchChatServerListener donniBot = createDonniBot();
 
         //Act
         String response = donniBot.processCommand("hi");
@@ -36,23 +34,41 @@ public class DonniBotTest
     }
 
     @Test
-    public void DonniBot_GivenABotThatCanConnectToTwitchServer_RaiseEvent()
+    public void DonniBot_GivenABotThatCanConnectToTwitchServer_ReceivesEvent()
     {
         //Arrange
-        Configuration<PircBotX> fakeConfig = new Configuration<PircBotX>(new Configuration.Builder<PircBotX>()) {
-
-        };
-        PircBotX fakeBot = createFakeBot();
-        IDonniBot donniBot = new DonniBot();
+        ITwitchChatServer server = createFakeBotFacade();
+        ITwitchChatServerListener donniBot = new DonniBot();
 
         //Act
+        server.registerListener(donniBot);
+        server.start();
 
         //Assert
+        assertTrue(donniBot.isEventReceived());
+    }
 
+    private ITwitchChatServer createFakeBotFacade() {
+        return new FakeTwitchChatServer();
+    }
+
+    private static Configuration<PircBotX> getConfiguration() {
+        return new Configuration.Builder<>()
+                .setName(BotConfig.BOT_NAME)
+                .setServerPassword(BotConfig.SERVER_PASSWORD)
+                .setServerPort(BotConfig.SERVER_PORT)
+                .setServerHostname(BotConfig.SERVER_HOSTNAME)
+                .addAutoJoinChannel(BotConfig.CHANNEL_NAME)
+                .buildConfiguration();
+    }
+
+    private ITwitchChatServer createTwitchServer()
+    {
+        return new TwitchChatServer(null);
     }
 
     private PircBotX createFakeBot() {
-        return new PircBotX(null) {
+        return new PircBotX(getConfiguration()) {
             @Override
             public void startBot() throws IOException, IrcException {
                 //
@@ -205,7 +221,7 @@ public class DonniBotTest
         };
     }
 
-    private IDonniBot createDonniBot() {
+    private ITwitchChatServerListener createDonniBot() {
         return new DonniBot();
     }
 }
