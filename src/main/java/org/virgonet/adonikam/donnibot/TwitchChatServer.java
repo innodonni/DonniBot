@@ -2,12 +2,13 @@ package org.virgonet.adonikam.donnibot;
 
 import org.pircbotx.PircBotX;
 import org.pircbotx.exception.IrcException;
-import org.pircbotx.hooks.Event;
 import org.pircbotx.hooks.Listener;
+import org.pircbotx.hooks.ListenerAdapter;
+import org.pircbotx.hooks.events.MessageEvent;
 
 import java.io.IOException;
 
-public class TwitchChatServer implements ITwitchChatServer, Listener<PircBotX> {
+public class TwitchChatServer extends ListenerAdapter<PircBotX> implements ITwitchChatServer, Listener<PircBotX> {
 
     private PircBotX pircBotX;
     private ITwitchChatServerListener listener;
@@ -19,12 +20,14 @@ public class TwitchChatServer implements ITwitchChatServer, Listener<PircBotX> {
     @Override
     public void registerListener(ITwitchChatServerListener listener) {
         // TODO Make it support more than one
-
         this.listener = listener;
     }
 
     @Override
-    public void start() {
+    public void start() throws PointlessBotException {
+        if (listener == null)
+            throw new PointlessBotException();
+
         // TODO Create my own exception type
         try {
             pircBotX.startBot();
@@ -36,7 +39,7 @@ public class TwitchChatServer implements ITwitchChatServer, Listener<PircBotX> {
     }
 
     @Override
-    public void onEvent(Event<PircBotX> event) throws Exception {
-        listener.processCommand("hi");
+    public void onMessage(MessageEvent event) throws Exception {
+        listener.processCommand(event.getMessage());
     }
 }
