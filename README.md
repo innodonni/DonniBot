@@ -1,4 +1,4 @@
-DonniBot
+DonniBot  [![Build Status](https://travis-ci.org/innodonni/DonniBot.png?branch=master)](https://travis-ci.org/innodonni/DonniBot)
 ========
 
 A unit-tested Twitch IRC chat bot.
@@ -6,7 +6,7 @@ A unit-tested Twitch IRC chat bot.
 ## Dependencies
 
 - Java 8 Runtime Environment
-- Tested on Microsoft(R) Windows(R) 7 only
+- Tested on Microsoft(R) Windows(R) 7 Professional x64 only
 
 ## Usage
 
@@ -21,3 +21,7 @@ A unit-tested Twitch IRC chat bot.
 
 This software uses Apache Maven to manage build dependencies. Refer to the pom.xml
 file and the Apache website for instructions on obtaining and using Maven.
+
+## Getting involved
+
+Collaborate with [Floobits](https://floobits.com) or submit a pull request.
