@@ -1,4 +1,4 @@
-DonniBot  [![Build Status](https://travis-ci.org/innodonni/DonniBot.png?branch=master)](https://travis-ci.org/innodonni/DonniBot)
+DonniBot  [![Build Status](https://travis-ci.org/innodonni/DonniBot.png?branch=master)](https://travis-ci.org/innodonni/DonniBot) [![Floobits Status](https://floobits.com/innodonni/DonniBot.png)](https://floobits.com/innodonni/DonniBot/redirect)
 ========
 
 A unit-tested Twitch IRC chat bot.
