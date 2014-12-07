@@ -1,7 +1,7 @@
 <component name="ArtifactManager">
-  <artifact name="DonniBot:jar">
-    <output-path>$PROJECT_DIR$/out/artifacts/DonniBot_jar</output-path>
-    <root id="root">
+  <artifact type="jar" name="DonniBot">
+    <output-path>$PROJECT_DIR$/out/artifacts/DonniBot</output-path>
+    <root id="archive" name="DonniBot.jar">
       <element id="archive" name="DonniBot.jar">
         <element id="module-output" name="DonniBot" />
         <element id="module-test-output" name="DonniBot" />

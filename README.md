@@ -14,7 +14,7 @@ A unit-tested Twitch IRC chat bot.
 
 <!---
 - Configure authentication details in the properties file
-- Run: `java -jar DonniBot.jar Main`
+- Run: `java -jar DonniBot.jar`
 -->
 
 ## Compiling

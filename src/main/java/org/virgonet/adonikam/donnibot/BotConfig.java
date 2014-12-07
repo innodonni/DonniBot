@@ -5,6 +5,7 @@ import org.pircbotx.PircBotX;
 
 import java.io.InputStream;
 
+@SuppressWarnings("WeakerAccess")
 public class BotConfig {
     public static final java.lang.String CHANNEL_NAME = "y";
     public static final String SERVER_HOSTNAME = "z";

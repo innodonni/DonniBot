@@ -9,7 +9,7 @@ public class DonniBot implements ITwitchChatServerListener {
         return eventReceived;
     }
 
-    public boolean eventReceived = false;
+    private boolean eventReceived = false;
 
     @Override
     public String processCommand(String command) {

@@ -10,7 +10,7 @@ import java.io.IOException;
 
 public class TwitchChatServer extends ListenerAdapter<PircBotX> implements ITwitchChatServer, Listener<PircBotX> {
 
-    private PircBotX pircBotX;
+    private final PircBotX pircBotX;
     private ITwitchChatServerListener listener;
 
     public TwitchChatServer(PircBotX pircBotX) {

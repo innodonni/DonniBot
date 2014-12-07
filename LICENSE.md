@@ -1,5 +1,5 @@
 Copyright (c) 2014, Adonikam Virgo (http://github.com/innodonni/DonniBot)
-Perpetual rights to use, copy, modify, distribute and relicense my
+Perpetual rights to use, copy, modify, distribute and re-license my
 derived works reserved.  
 (add your copyright notice(s) on derived works here)
 
