@@ -30,6 +30,7 @@ public class TwitchChatServerTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void receivesChatMessage_withListenerListening_callsProcessCommand() throws Exception {
         //Arrange
         TwitchChatServerImpl server = getTwitchChatServer();
