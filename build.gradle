@@ -1,0 +1,122 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'idea'
+
+defaultTasks "build"
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile group: 'org.pircbotx', name: 'pircbotx', version:'2.0.1'
+    compile group: 'ch.qos.logback', name: 'logback-core', version:'1.1.2'
+    compile group: 'ch.qos.logback', name: 'logback-classic', version:'1.1.2'
+    compile group: 'com.google.inject', name: 'guice', version:'3.0'
+    //compile group: 'com.google.guava', name: 'guava', version: '12.0'
+    compile group: 'org.javassist', name: 'javassist', version:'3.18.0-GA'
+    compile group: 'org.apache.commons', name: 'commons-io', version:'1.3.2'
+    compile group: 'commons-beanutils', name: 'commons-beanutils', version:'1.9.2'
+    compile group: 'org.apache.commons', name: 'commons-lang3', version:'3.0'
+    compile group: 'org.objenesis', name: 'objenesis', version:'2.1'
+    compile group: 'org.mockito', name: 'mockito-core', version:'1.10.8'
+    compile group: 'org.slf4j', name: 'slf4j-api', version:'1.7.7'
+    compile group: 'org.slf4j', name: 'jcl-over-slf4j', version:'1.7.7'
+
+    testCompile group: 'junit', name: 'junit', version:'4.11'
+    testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version:'1.1.9.RELEASE'
+
+    // replace logging used by spring framework
+    modules {
+        module("org.apache.commons:commons-logging") {
+            replacedBy("org.slf4j:jcl-over-slf4j")
+        }
+    }
+}
+
+task processConfig(type: Sync) {
+    description 'Copies all config files into config folder in build directory.'
+    from "$projectDir/src/main/config"
+    into "$buildDir/config"
+}
+processResources.dependsOn processConfig
+
+task libs(type: Sync) {
+    description 'Copies all dependencies into libs folder in build directory.'
+    from configurations.testRuntime
+    into "$buildDir/libs"
+}
+
+task docs(type: Copy) {
+    description 'Deploys markdown docs as txt files in build directory.'
+    from projectDir
+    into buildDir
+    include '*.md'
+    rename '(.+).md', '$1.txt'
+}
+
+Iterable<String> classpath = ["config/"] +
+                             configurations.testRuntime.collect { "libs/" + it.getName() }
+
+jar {
+    destinationDir = buildDir
+    manifest {
+        attributes 'Main-Class': 'org.virgonet.adonikam.donnibot.Main',
+                   'Class-Path': classpath.join(" ")
+    }
+    dependsOn libs
+}
+
+task deployZip(type: Zip, dependsOn: [build, docs]) {
+    description 'Deploys all necessary files to a single distributable zip file.'
+    from buildDir
+    destinationDir = file('build/distributions')
+    include '*.jar', 'libs/*', 'config/*', '*.txt'
+}
+build.mustRunAfter clean // never deploy nothing
+
+task release(dependsOn: [clean, deployZip]) {
+    description 'Generates zip from scratch.'
+}
+
+task checkUntrackedFiles(type:Exec) {
+    description 'Checks there aren\'t any files that might be accidentally released.'
+    executable 'git'
+    args 'ls-files', '--others', '--exclude-standard', '--error-unmatch', '--', '*'
+    ignoreExitValue = true
+    standardOutput = new ByteArrayOutputStream()
+    errorOutput = new ByteArrayOutputStream()
+    doLast {
+        if (execResult.exitValue == 0) {
+            throw new GradleException("Untracked/unignored files in tree:\n" + standardOutput.toString())
+        }
+    }
+}
+
+task checkDirtyTree(type:Exec) {
+    description 'Checks there aren\'t any uncommitted changes when releasing.'
+    executable 'git'
+    args 'diff', '--no-ext-diff', '--quiet', '--exit-code'
+}
+
+gradle.taskGraph.whenReady {taskGraph ->
+    if (taskGraph.hasTask(release)) {
+        version = '1.0'
+        check.dependsOn checkUntrackedFiles
+        check.dependsOn checkDirtyTree
+
+        processConfig << {
+            copy {
+                from "$buildDir/config"
+                into "$buildDir/config"
+                include 'defaults.properties'
+                rename 'defaults.properties', 'donnibot.properties'
+            }
+        }
+    }
+}
+
+task showMeCache << {
+    configurations.compile.each { println it }
+}

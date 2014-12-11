@@ -1,0 +1,53 @@
+<configuration scan="true" scanPeriod="30 seconds">
+    <!--
+    Encoder pattern syntax documented here:
+    http://logback.qos.ch/manual/layouts.html#conversionWord
+    -->
+    <appender name="LogFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/%d{yyyy,aux}/DonniBot.%d{yyyy-MM-dd}.%i.log.zip</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{HH:mm:ss}%.-1level [%thread] %logger{36} %msg%n</pattern>
+            <outputPatternAsHeader>true</outputPatternAsHeader>
+            <!-- Set immediateFlush to false if performance is an issue -->
+            <immediateFlush>true</immediateFlush>
+        </encoder>
+    </appender>
+
+    <!-- Wrap LogFile appender with this to drop verbose messages when performance is low -->
+    <!--<appender name="LogFile" class="ch.qos.logback.classic.AsyncAppender">-->
+        <!--<appender-ref ref="LogFileBase" />-->
+    <!--</appender>-->
+
+    <appender name="StdErr" class="ch.qos.logback.core.ConsoleAppender">
+        <Target>System.err</Target>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>info</level>
+            <onMatch>ACCEPT</onMatch><!--This must be uppercase-->
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <encoder>
+            <pattern>%d{HH:mm:ss}%highlight(%.-1level) %replace(%msg){'PASS .*', 'PASS (omitted from log for security reasons)'}%n</pattern>
+        </encoder>
+    </appender>
+    <appender name="RedStdErr" class="ch.qos.logback.core.ConsoleAppender">
+        <Target>System.err</Target>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>warn</level>
+        </filter>
+        <encoder>
+            <pattern>%boldRed(%d{HH:mm:ss})%boldRed(%.-1level)%boldRed([%thread]) %boldRed(%logger{10}) %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <root level="info"><!-- Change to "debug" when debugging -->
+        <appender-ref ref="StdErr"/>
+        <appender-ref ref="RedStdErr" />
+        <appender-ref ref="LogFile" />
+    </root>
+</configuration>
