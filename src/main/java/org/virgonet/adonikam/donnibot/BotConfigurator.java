@@ -1,8 +1,7 @@
 package org.virgonet.adonikam.donnibot;
 
-import org.pircbotx.PircBotX;
 import org.pircbotx.Configuration;
-import org.springframework.context.annotation.Bean;
+import org.pircbotx.PircBotX;
 
 import javax.inject.Inject;
 import javax.inject.Named;

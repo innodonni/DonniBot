@@ -1,8 +1,6 @@
 package org.virgonet.adonikam.donnibot;
 
 import org.junit.Test;
-import org.mockito.Mockito;
-import org.mockito.Spy;
 import org.pircbotx.PircBotX;
 import org.pircbotx.exception.IrcException;
 import org.pircbotx.hooks.events.MessageEvent;

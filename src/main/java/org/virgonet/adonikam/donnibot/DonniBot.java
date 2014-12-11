@@ -6,7 +6,7 @@ import org.virgonet.adonikam.donnibot.interfaces.TwitchChatServerListener;
 
 import javax.inject.Named;
 
-@Named("donniBot")
+@Named
 public class DonniBot implements TwitchChatServerListener {
     @Override
     public boolean isEventReceived() {

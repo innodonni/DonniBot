@@ -1,29 +1,13 @@
 package org.virgonet.adonikam.donnibot;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
-
 import javax.inject.Named;
 
-@Configuration
-@Profile("production")
-@PropertySource(value = "file:config/defaults.properties", ignoreResourceNotFound = false)
-@PropertySource(value = "file:config/donnibot.properties", ignoreResourceNotFound = true)
-@Named("botConfig")
+@Named
 public class BotConfig {
-    @Value("${org.virgonet.adonikam.donnibot.botName}")
     protected String botName;
-    @Value("${org.virgonet.adonikam.donnibot.channelName}")
     protected String channelName;
-    @Value("${org.virgonet.adonikam.donnibot.serverHostName}")
     protected String serverHostName;
-    @Value("${org.virgonet.adonikam.donnibot.serverPort}")
     protected int serverPort;
-    @Value("${org.virgonet.adonikam.donnibot.serverPassword}")
     protected String serverPassword;
 
     protected BotConfig() {
@@ -38,28 +22,43 @@ public class BotConfig {
         this.serverPassword = serverPassword;
     }
 
-    @Bean // cannot be @Named or the bean won't be initialised
-    public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
-        return new PropertySourcesPlaceholderConfigurer();
-    }
-
     public String getBotName() {
         return botName;
+    }
+
+    public void setBotName(String botName) {
+        this.botName = botName;
     }
 
     public String getChannelName() {
         return channelName;
     }
 
+    public void setChannelName(String channelName) {
+        this.channelName = channelName;
+    }
+
     public String getServerHostName() {
         return serverHostName;
+    }
+
+    public void setServerHostName(String serverHostName) {
+        this.serverHostName = serverHostName;
     }
 
     public int getServerPort() {
         return serverPort;
     }
 
+    public void setServerPort(int serverPort) {
+        this.serverPort = serverPort;
+    }
+
     public String getServerPassword() {
         return serverPassword;
+    }
+
+    public void setServerPassword(String serverPassword) {
+        this.serverPassword = serverPassword;
     }
 }
