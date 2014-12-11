@@ -10,17 +10,14 @@ A unit-tested Twitch IRC chat bot.
 
 ## Usage
 
-- TODO!
-
-<!---
-- Configure authentication details in the properties file
-- Run: `java -jar DonniBot.jar`
--->
+- If you haven't got one already, you'll need to get an [OAuth token](http://www.twitchapps.com/tmi/) for Twitch IRC.
+- Configure authentication details in the config/donnibot.properties file.
+- Run: `java -jar DonniBot-1.0-SNAPSHOT.jar`
 
 ## Compiling
 
-This software uses Apache Maven to manage build dependencies. Refer to the pom.xml
-file and the Apache website for instructions on obtaining and using Maven.
+This software uses Gradle to manage build dependencies. You can build the project
+simply by running `gradlew` or `gradlew deployZip` from the root of the project.
 
 ## Getting involved
 
