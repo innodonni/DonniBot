@@ -1,34 +1,65 @@
 package org.virgonet.adonikam.donnibot;
 
-import org.pircbotx.Configuration;
-import org.pircbotx.PircBotX;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 
-import java.io.InputStream;
+import javax.inject.Named;
 
-@SuppressWarnings("WeakerAccess")
+@Configuration
+@Profile("production")
+@PropertySource(value = "file:config/defaults.properties", ignoreResourceNotFound = false)
+@PropertySource(value = "file:config/donnibot.properties", ignoreResourceNotFound = true)
+@Named("botConfig")
 public class BotConfig {
-    public static final java.lang.String CHANNEL_NAME = "y";
-    public static final String SERVER_HOSTNAME = "z";
-    public static final int SERVER_PORT = 1;
-    public static final String SERVER_PASSWORD = "";
-    public static final String BOT_NAME = "x";
+    @Value("${org.virgonet.adonikam.donnibot.botName}")
+    protected String botName;
+    @Value("${org.virgonet.adonikam.donnibot.channelName}")
+    protected String channelName;
+    @Value("${org.virgonet.adonikam.donnibot.serverHostName}")
+    protected String serverHostName;
+    @Value("${org.virgonet.adonikam.donnibot.serverPort}")
+    protected int serverPort;
+    @Value("${org.virgonet.adonikam.donnibot.serverPassword}")
+    protected String serverPassword;
 
-    /**
-     *
-     * @param configurationData the contents of a Java properties file
-     */
-    public BotConfig(InputStream configurationData) {
-        // TODO Get properties out of stream
+    protected BotConfig() {
+
     }
 
-    public Configuration<PircBotX> createPircBotConfiguration() {
-        return null;
-//        return new Configuration.Builder<>()
-//                .setName(BotConfig.BOT_NAME)
-//                .setServerPassword(BotConfig.SERVER_PASSWORD)
-//                .setServerPort(BotConfig.SERVER_PORT)
-//                .setServerHostname(BotConfig.SERVER_HOSTNAME)
-//                .addAutoJoinChannel(BotConfig.CHANNEL_NAME)
-//                .buildConfiguration();
+    public BotConfig(String botName, String channelName, String serverHostName, int serverPort, String serverPassword) {
+        this.botName = botName;
+        this.channelName = channelName;
+        this.serverHostName = serverHostName;
+        this.serverPort = serverPort;
+        this.serverPassword = serverPassword;
+    }
+
+    @Bean // cannot be @Named or the bean won't be initialised
+    public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
+        return new PropertySourcesPlaceholderConfigurer();
+    }
+
+    public String getBotName() {
+        return botName;
+    }
+
+    public String getChannelName() {
+        return channelName;
+    }
+
+    public String getServerHostName() {
+        return serverHostName;
+    }
+
+    public int getServerPort() {
+        return serverPort;
+    }
+
+    public String getServerPassword() {
+        return serverPassword;
     }
 }

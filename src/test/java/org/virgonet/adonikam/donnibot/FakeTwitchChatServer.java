@@ -1,10 +1,13 @@
 package org.virgonet.adonikam.donnibot;
 
-public class FakeTwitchChatServer implements ITwitchChatServer {
-    private ITwitchChatServerListener listener;
+import org.virgonet.adonikam.donnibot.interfaces.TwitchChatServer;
+import org.virgonet.adonikam.donnibot.interfaces.TwitchChatServerListener;
+
+public class FakeTwitchChatServer implements TwitchChatServer {
+    private TwitchChatServerListener listener;
 
     @Override
-    public void registerListener(ITwitchChatServerListener listener) {
+    public void registerListener(TwitchChatServerListener listener) {
         this.listener = listener;
     }
 

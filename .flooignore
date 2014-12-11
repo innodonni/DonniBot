@@ -4,8 +4,9 @@ tmp
 vendor
 .idea/workspace.xml
 .idea/misc.xml
-target
+build
 out
-*.log
-*/.idea/tasks.xml
-*/.idea/dictionaries/*
+.gradle
+.idea/tasks.xml
+.idea/dictionaries/*
+src/main/config/donnibot.properties

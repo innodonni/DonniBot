@@ -1,6 +1,8 @@
 package org.virgonet.adonikam.donnibot;
 
 import org.junit.Test;
+import org.virgonet.adonikam.donnibot.interfaces.TwitchChatServer;
+import org.virgonet.adonikam.donnibot.interfaces.TwitchChatServerListener;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -11,7 +13,7 @@ public class DonniBotTest
     public void DonniBot_GivenCommandHi_RespondsWithHello()
     {
         //Arrange
-        ITwitchChatServerListener donniBot = createDonniBot();
+        TwitchChatServerListener donniBot = createDonniBot();
 
         //Act
         String response = donniBot.processCommand("hi");
@@ -23,8 +25,8 @@ public class DonniBotTest
     @Test
     public void DonniBot_GivenABotThatCanConnectToTwitchServer_ReceivesEvent() throws PointlessBotException {
         //Arrange
-        ITwitchChatServer server = createMockServer();
-        ITwitchChatServerListener donniBot = new DonniBot();
+        TwitchChatServer server = createMockServer();
+        TwitchChatServerListener donniBot = new DonniBot();
 
         //Act
         server.registerListener(donniBot);
@@ -34,11 +36,11 @@ public class DonniBotTest
         assertTrue(donniBot.isEventReceived());
     }
 
-    private ITwitchChatServer createMockServer() {
+    private TwitchChatServer createMockServer() {
         return new FakeTwitchChatServer();
     }
 
-    private ITwitchChatServerListener createDonniBot() {
+    private TwitchChatServerListener createDonniBot() {
         return new DonniBot();
     }
 }

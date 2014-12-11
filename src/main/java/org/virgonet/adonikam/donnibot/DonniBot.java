@@ -2,8 +2,12 @@ package org.virgonet.adonikam.donnibot;
 
 import org.pircbotx.PircBotX;
 import org.pircbotx.hooks.Event;
+import org.virgonet.adonikam.donnibot.interfaces.TwitchChatServerListener;
 
-public class DonniBot implements ITwitchChatServerListener {
+import javax.inject.Named;
+
+@Named("donniBot")
+public class DonniBot implements TwitchChatServerListener {
     @Override
     public boolean isEventReceived() {
         return eventReceived;

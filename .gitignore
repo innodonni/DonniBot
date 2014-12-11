@@ -1,4 +1,6 @@
-target
+build
 out
+.gradle
 .idea/workspace.xml
 .idea/dictionaries/*
+src/main/config/donnibot.properties

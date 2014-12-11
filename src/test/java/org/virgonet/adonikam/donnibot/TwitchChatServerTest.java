@@ -1,9 +1,12 @@
 package org.virgonet.adonikam.donnibot;
 
 import org.junit.Test;
+import org.mockito.Mockito;
+import org.mockito.Spy;
 import org.pircbotx.PircBotX;
 import org.pircbotx.exception.IrcException;
 import org.pircbotx.hooks.events.MessageEvent;
+import org.virgonet.adonikam.donnibot.interfaces.TwitchChatServerListener;
 
 import java.io.IOException;
 
@@ -13,21 +16,24 @@ public class TwitchChatServerTest {
     @Test
     public void start_WhenCalled_UnderlyingBotIsStarted() throws IOException, IrcException, PointlessBotException {
         //Arrange
-        PircBotX mockedPircBot = mock(PircBotX.class);
-        TwitchChatServer server = new TwitchChatServer(mockedPircBot);
-        server.registerListener(mock(ITwitchChatServerListener.class));
+        BotConfigurator botConfigurator = mock(BotConfigurator.class);
+        PircBotX bot = mock(PircBotX.class);
+        when(botConfigurator.createPircBotX()).thenReturn(bot);
+        TwitchChatServerImpl server = new TwitchChatServerImpl(botConfigurator);
+        server.registerListener(mock(TwitchChatServerListener.class));
+
         //Act
         server.start();
 
         //Assert
-        verify(mockedPircBot).startBot();
+        verify(bot).startBot();
     }
 
     @Test
     public void receivesChatMessage_withListenerListening_callsProcessCommand() throws Exception {
         //Arrange
-        TwitchChatServer server = getTwitchChatServer();
-        ITwitchChatServerListener mockListener = mock(ITwitchChatServerListener.class);
+        TwitchChatServerImpl server = getTwitchChatServer();
+        TwitchChatServerListener mockListener = mock(TwitchChatServerListener.class);
         MessageEvent<PircBotX> mockEvent = (MessageEvent<PircBotX>) mock(MessageEvent.class);
         when(mockEvent.getMessage()).thenReturn("foo");
 
@@ -44,7 +50,7 @@ public class TwitchChatServerTest {
     @Test(expected=PointlessBotException.class)
     public void start_noListenersRegistered_throwsException() throws PointlessBotException {
         //Arrange
-        TwitchChatServer server = getTwitchChatServer();
+        TwitchChatServerImpl server = getTwitchChatServer();
 
         //Act
         server.start();
@@ -52,8 +58,10 @@ public class TwitchChatServerTest {
         //Assert exception thrown
     }
 
-    private TwitchChatServer getTwitchChatServer() {
-        PircBotX mockedPircBot = mock(PircBotX.class);
-        return new TwitchChatServer(mockedPircBot);
+    private TwitchChatServerImpl getTwitchChatServer() {
+        BotConfigurator botConfigurator = mock(BotConfigurator.class);
+        PircBotX bot = mock(PircBotX.class);
+        when(botConfigurator.createPircBotX()).thenReturn(bot);
+        return new TwitchChatServerImpl(botConfigurator);
     }
 }

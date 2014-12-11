@@ -25,5 +25,8 @@
         <module name="DonniBot" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="DonniBot" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
 </project>
