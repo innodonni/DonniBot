@@ -153,24 +153,23 @@ task githubUpload(type:Exec, dependsOn: [deployZip, githubRelease]) {
 release.dependsOn clean, checkUntrackedFiles, checkDirtyTree, githubUpload
 
 task all {
-    description 'Build and release if on a tag commit.'
+    description 'Build, and release if on a tag commit.'
     dependsOn deployZip
 }
 
-gradle.taskGraph.whenReady {taskGraph ->
-    // release if we're building a tagged commit on Travis CI
-    if(!version.toString().endsWith("-SNAPSHOT") &&
-       !System.getenv("GITHUB_TOKEN").isEmpty()) {
-        all.dependsOn release
+// trigger releases on Travis CI based on tag detected by release plugin
+if(!version.toString().endsWith("-SNAPSHOT") &&
+        System.getenv("GITHUB_TOKEN") &&  // required by githubRelease/Upload tasks
+        System.getenv("CI_USER_TOKEN")) { // used by release plugin to push new tags
+    all.dependsOn release
 
-        // ship defaults under normal configuration filename
-        processConfig << {
-            copy {
-                from "$buildDir/config"
-                into "$buildDir/config"
-                include 'defaults.properties'
-                rename 'defaults.properties', 'donnibot.properties'
-            }
+    // ship defaults under normal configuration filename
+    processConfig << {
+        copy {
+            from "$buildDir/config"
+            into "$buildDir/config"
+            include 'defaults.properties'
+            rename 'defaults.properties', 'donnibot.properties'
         }
     }
 }
