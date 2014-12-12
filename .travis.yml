@@ -2,7 +2,7 @@ language: java
 jdk:
   - oraclejdk8
 
-before_script:
-  - chmod +x grailsw
+script: ./grailsw all -Prelease.attachRemote="https://github.com/innodonni/DonniBot.git"
 
-script: ./grailsw
+before_install:
+  - echo "machine github.com\n  login $CI_USER_TOKEN" >> ~/.netrc

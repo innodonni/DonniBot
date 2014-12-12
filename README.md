@@ -22,3 +22,9 @@ simply by running `gradlew` or `gradlew deployZip` from the root of the project.
 ## Getting involved
 
 Collaborate with [Floobits](https://floobits.com) or submit a pull request.
+
+## Creating a release with gradle
+
+- Follow [SemVer](http://semver.org) numbering.
+- Run: `git tag vX.Y.Z && git push --tags` on the master branch.
+- Travis CI will automatically upload the zip from the build to GitHub.

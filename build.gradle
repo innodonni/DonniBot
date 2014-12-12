@@ -1,9 +1,33 @@
+import org.apache.tools.ant.filters.*
+
+// Use plugin to set project.version based on latest git tag
+buildscript {
+    repositories {
+        mavenCentral() // for plugin dependencies
+    }
+}
+
+plugins {
+    id 'pl.allegro.tech.build.axion-release' version '0.9.9'
+}
+
+scmVersion {
+    tag {
+        prefix = 'v'
+        versionSeparator = ''
+    }
+}
+
+// Starts at '0.1.0-SNAPSHOT' and subsequently '{tag+0.0.n}-SNAPSHOT' if not on tag
+// See https://github.com/allegro/axion-release-plugin/
+version = scmVersion.version
+
+// Task definitions
 apply plugin: 'java'
 apply plugin: 'maven'
 apply plugin: 'idea'
 
-defaultTasks "build"
-version = '1.0-SNAPSHOT'
+defaultTasks "all"
 
 repositories {
     mavenCentral()
@@ -56,6 +80,13 @@ task docs(type: Copy) {
     rename '(.+).md', '$1.txt'
 }
 
+// Fill application.properties with version
+afterEvaluate {
+    configure(tasks[sourceSets.main.processResourcesTaskName]) {
+        filter(ReplaceTokens, tokens: [version: version])
+    }
+}
+
 Iterable<String> classpath = ["config/"] +
                              configurations.testRuntime.collect { "libs/" + it.getName() }
 
@@ -75,10 +106,6 @@ task deployZip(type: Zip, dependsOn: [build, docs]) {
     include '*.jar', 'libs/*', 'config/*', '*.txt'
 }
 build.mustRunAfter clean // never deploy nothing
-
-task release(dependsOn: [clean, deployZip]) {
-    description 'Generates zip from scratch.'
-}
 
 task checkUntrackedFiles(type:Exec) {
     description 'Checks there aren\'t any files that might be accidentally released.'
@@ -100,12 +127,43 @@ task checkDirtyTree(type:Exec) {
     args 'diff', '--no-ext-diff', '--quiet', '--exit-code'
 }
 
-gradle.taskGraph.whenReady {taskGraph ->
-    if (taskGraph.hasTask(release)) {
-        version = '1.0'
-        check.dependsOn checkUntrackedFiles
-        check.dependsOn checkDirtyTree
+task githubRelease(type:Exec) {
+    description 'Release to github based on tag (using GITHUB_TOKEN in env).'
+    executable 'gradle/bin/github-release-0.5.2-x64'
+    args 'release',
+         '--user', 'innodonni',
+         '--repo', 'DonniBot',
+         '--tag', 'v'+version,
+            '--name', 'DonniBot-v'+version,
+            '--description', 'Prerelease',
+            '--pre-release'
+}
+task githubUpload(type:Exec, dependsOn: [deployZip, githubRelease]) {
+    description 'Release to github based on tag (using GITHUB_TOKEN in env).'
+    executable 'gradle/bin/github-release-0.5.2-x64'
+    args 'upload',
+            '--user', 'innodonni',
+            '--repo', 'DonniBot',
+            '--tag', 'v'+version,
+            '--name', 'DonniBot-v'+version,
+            '--file', deployZip.archivePath
+}
 
+// release creates a tag for {tag+0.0.n} and pushes it using auth from ~/.netrc (see .travis.yml)
+release.dependsOn clean, checkUntrackedFiles, checkDirtyTree, githubUpload
+
+task all {
+    description 'Build and release if on a tag commit.'
+    dependsOn deployZip
+}
+
+gradle.taskGraph.whenReady {taskGraph ->
+    // release if we're building a tagged commit on Travis CI
+    if(!version.toString().endsWith("-SNAPSHOT") &&
+       !System.getenv("GITHUB_TOKEN").empty()) {
+        all.dependsOn release
+
+        // ship defaults under normal configuration filename
         processConfig << {
             copy {
                 from "$buildDir/config"
@@ -115,8 +173,4 @@ gradle.taskGraph.whenReady {taskGraph ->
             }
         }
     }
-}
-
-task showMeCache << {
-    configurations.compile.each { println it }
 }
