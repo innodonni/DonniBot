@@ -160,7 +160,7 @@ task all {
 gradle.taskGraph.whenReady {taskGraph ->
     // release if we're building a tagged commit on Travis CI
     if(!version.toString().endsWith("-SNAPSHOT") &&
-       !System.getenv("GITHUB_TOKEN").empty()) {
+       !System.getenv("GITHUB_TOKEN").isEmpty()) {
         all.dependsOn release
 
         // ship defaults under normal configuration filename
