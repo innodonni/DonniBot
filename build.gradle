@@ -16,6 +16,10 @@ scmVersion {
         prefix = 'v'
         versionSeparator = ''
     }
+
+    checks {
+        aheadOfRemote = false // crashes when HEAD is detached
+    }
 }
 
 // Starts at '0.1.0-SNAPSHOT' and subsequently '{tag+0.0.n}-SNAPSHOT' if not on tag
