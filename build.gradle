@@ -153,20 +153,8 @@ task githubUpload(type:Exec, dependsOn: [deployZip, githubRelease]) {
             '--file', deployZip.archivePath
 }
 
-task checkDetachedHead(type:Exec) {
-    description 'Check if HEAD is detached, if so skip aheadOfRemote check.'
-    executable 'git'
-    args 'symbolic-ref', '-q', 'HEAD'
-    ignoreExitValue = true
-    doLast {
-        if(execResult.exitValue != 0) {
-            scmVersion.checks.aheadOfRemote = false // crashes when HEAD is detached
-        }
-    }
-}
-
 // release creates a tag for {tag+0.0.n} and pushes it using auth from ~/.netrc (see .travis.yml)
-release.dependsOn clean, checkDetachedHead, checkUntrackedFiles, checkDirtyTree, githubUpload
+release.dependsOn clean, checkUntrackedFiles, checkDirtyTree, githubUpload
 
 task all {
     description 'Build, and release if on a tag commit.'
