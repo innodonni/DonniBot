@@ -16,10 +16,6 @@ scmVersion {
         prefix = 'v'
         versionSeparator = ''
     }
-
-    checks {
-        aheadOfRemote = false // crashes when HEAD is detached
-    }
 }
 
 // Starts at '0.1.0-SNAPSHOT' and subsequently '{tag+0.0.n}-SNAPSHOT' if not on tag
@@ -130,6 +126,8 @@ task checkDirtyTree(type:Exec) {
     executable 'git'
     args 'diff', '--no-ext-diff', '--quiet', '--exit-code'
 }
+// fail fast
+assemble.mustRunAfter checkUntrackedFiles, checkDirtyTree
 
 task githubRelease(type:Exec) {
     description 'Release to github based on tag (using GITHUB_TOKEN in env).'
@@ -142,6 +140,8 @@ task githubRelease(type:Exec) {
             '--description', 'Prerelease',
             '--pre-release'
 }
+githubRelease.mustRunAfter verifyRelease
+
 task githubUpload(type:Exec, dependsOn: [deployZip, githubRelease]) {
     description 'Release to github based on tag (using GITHUB_TOKEN in env).'
     executable 'gradle/bin/github-release-0.5.2-x64'
@@ -149,12 +149,24 @@ task githubUpload(type:Exec, dependsOn: [deployZip, githubRelease]) {
             '--user', 'innodonni',
             '--repo', 'DonniBot',
             '--tag', 'v'+version,
-            '--name', 'DonniBot-v'+version,
+            '--name', 'DonniBot-v'+version+'.zip',
             '--file', deployZip.archivePath
 }
 
+task checkDetachedHead(type:Exec) {
+    description 'Check if HEAD is detached, if so skip aheadOfRemote check.'
+    executable 'git'
+    args 'symbolic-ref', '-q', 'HEAD'
+    ignoreExitValue = true
+    doLast {
+        if(execResult.exitValue != 0) {
+            scmVersion.checks.aheadOfRemote = false // crashes when HEAD is detached
+        }
+    }
+}
+
 // release creates a tag for {tag+0.0.n} and pushes it using auth from ~/.netrc (see .travis.yml)
-release.dependsOn clean, checkUntrackedFiles, checkDirtyTree, githubUpload
+release.dependsOn clean, checkDetachedHead, checkUntrackedFiles, checkDirtyTree, githubUpload
 
 task all {
     description 'Build, and release if on a tag commit.'
