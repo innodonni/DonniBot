@@ -127,7 +127,7 @@ task checkDirtyTree(type:Exec) {
     args 'diff', '--no-ext-diff', '--quiet', '--exit-code'
 }
 // fail fast
-assemble.mustRunAfter checkUntrackedFiles, checkDirtyTree
+assemble.mustRunAfter checkUntrackedFiles, checkDirtyTree, verifyRelease
 
 task githubRelease(type:Exec) {
     description 'Release to github based on tag (using GITHUB_TOKEN in env).'
