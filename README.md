@@ -25,8 +25,8 @@ Collaborate with [Floobits](https://floobits.com) or submit a pull request.
 
 ## Creating a release
 
-- Follow [SemVer](http://semver.org) numbering.
-- Create the appropriate [release-X.Y branch](http://nvie.com/posts/a-successful-git-branching-model/).
+- Follow [Semantic Versioning](http://semver.org) guidelines.
+- Create the [appropriate release-X.Y branch](http://nvie.com/posts/a-successful-git-branching-model/#creating-a-release-branch).
 - When ready, merge back into master and run the following:
  - `git tag vX.Y.Z && git push --tags`
 - The build script on Travis CI will automatically upload the release to GitHub.

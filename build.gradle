@@ -137,8 +137,9 @@ task githubRelease(type:Exec) {
          '--repo', 'DonniBot',
          '--tag', 'v'+version,
             '--name', 'DonniBot-v'+version,
-            '--description', 'Prerelease',
-            '--pre-release'
+            '--description', 'Release of DonniBot version '+version
+    if (version.toString().startsWith('0'))
+        args '--pre-release'
 }
 githubRelease.mustRunAfter verifyRelease
 
