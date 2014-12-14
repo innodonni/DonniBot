@@ -4,8 +4,10 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.pircbotx.PircBotX;
 import org.pircbotx.hooks.events.MessageEvent;
+import org.virgonet.adonikam.donnibot.interfaces.TwitchChatServerException;
 import org.virgonet.adonikam.donnibot.interfaces.TwitchChatServer;
 import org.virgonet.adonikam.donnibot.interfaces.TwitchChatServerListener;
+import org.virgonet.adonikam.donnibot.listeners.DonniBot;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -28,7 +30,7 @@ public class DonniBotTest
     }
 
     @Test
-    public void DonniBot_GivenABotThatCanConnectToTwitchServer_ReceivesEvent() throws BotException {
+    public void DonniBot_GivenABotThatCanConnectToTwitchServer_ReceivesEvent() throws TwitchChatServerException {
         //Arrange
         TwitchChatServer server = createMockServer();
         TwitchChatServerListener donniBot = new DonniBot();

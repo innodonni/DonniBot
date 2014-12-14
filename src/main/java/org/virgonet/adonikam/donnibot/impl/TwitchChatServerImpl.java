@@ -1,17 +1,19 @@
-package org.virgonet.adonikam.donnibot;
+package org.virgonet.adonikam.donnibot.impl;
 
 import org.pircbotx.PircBotX;
 import org.pircbotx.exception.IrcException;
 import org.pircbotx.hooks.Listener;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
+import org.virgonet.adonikam.donnibot.config.BotConfigurator;
+import org.virgonet.adonikam.donnibot.interfaces.TwitchChatServerException;
 import org.virgonet.adonikam.donnibot.interfaces.TwitchChatServerListener;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.IOException;
 
-@Named("twitchChatServerImpl")
+@Named
 public class TwitchChatServerImpl extends ListenerAdapter<PircBotX> implements org.virgonet.adonikam.donnibot.interfaces.TwitchChatServer, Listener<PircBotX> {
 
     protected final PircBotX pircBotX;
@@ -29,16 +31,16 @@ public class TwitchChatServerImpl extends ListenerAdapter<PircBotX> implements o
     }
 
     @Override
-    public void start() throws BotException {
+    public void start() throws TwitchChatServerException {
         if (listener == null)
-            throw new BotException("Pointless bot (has no listeners)");
+            throw new TwitchChatServerException("Pointless bot (has no listeners)");
 
         try {
             pircBotX.startBot();
         } catch (IOException e) {
-            throw new BotException("Network error", e);
+            throw new TwitchChatServerException("Network error", e);
         } catch (IrcException e) {
-            throw new BotException("Underlying bot crashed", e);
+            throw new TwitchChatServerException("Underlying bot crashed", e);
         }
     }
 

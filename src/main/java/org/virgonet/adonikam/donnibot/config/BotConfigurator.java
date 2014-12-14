@@ -1,4 +1,4 @@
-package org.virgonet.adonikam.donnibot;
+package org.virgonet.adonikam.donnibot.config;
 
 import org.pircbotx.Configuration;
 import org.pircbotx.PircBotX;

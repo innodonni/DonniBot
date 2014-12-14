@@ -1,4 +1,4 @@
-package org.virgonet.adonikam.donnibot;
+package org.virgonet.adonikam.donnibot.listeners;
 
 import org.pircbotx.PircBotX;
 import org.pircbotx.hooks.Event;

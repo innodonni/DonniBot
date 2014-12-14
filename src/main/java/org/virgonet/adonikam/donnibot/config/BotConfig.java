@@ -1,4 +1,4 @@
-package org.virgonet.adonikam.donnibot;
+package org.virgonet.adonikam.donnibot.config;
 
 import javax.inject.Named;
 
@@ -10,6 +10,10 @@ public class BotConfig {
     private String serverHostName;
     private int serverPort;
     private String serverPassword;
+
+    BotConfig() {
+
+    }
 
     public BotConfig(String botName, String channelName, String serverHostName, int serverPort, String serverPassword) {
         this.botName = botName;

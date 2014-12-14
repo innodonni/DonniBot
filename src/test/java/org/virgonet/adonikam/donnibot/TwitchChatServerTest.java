@@ -4,6 +4,9 @@ import org.junit.Test;
 import org.pircbotx.PircBotX;
 import org.pircbotx.exception.IrcException;
 import org.pircbotx.hooks.events.MessageEvent;
+import org.virgonet.adonikam.donnibot.config.BotConfigurator;
+import org.virgonet.adonikam.donnibot.interfaces.TwitchChatServerException;
+import org.virgonet.adonikam.donnibot.impl.TwitchChatServerImpl;
 import org.virgonet.adonikam.donnibot.interfaces.TwitchChatServerListener;
 
 import java.io.IOException;
@@ -12,7 +15,7 @@ import static org.mockito.Mockito.*;
 
 public class TwitchChatServerTest {
     @Test
-    public void start_WhenCalled_UnderlyingBotIsStarted() throws IOException, IrcException, BotException {
+    public void start_WhenCalled_UnderlyingBotIsStarted() throws IOException, IrcException, TwitchChatServerException {
         //Arrange
         BotConfigurator botConfigurator = mock(BotConfigurator.class);
         PircBotX bot = mock(PircBotX.class);
@@ -46,8 +49,8 @@ public class TwitchChatServerTest {
     }
 
 
-    @Test(expected=BotException.class)
-    public void start_noListenersRegistered_throwsException() throws BotException {
+    @Test(expected=TwitchChatServerException.class)
+    public void start_noListenersRegistered_throwsException() throws TwitchChatServerException {
         //Arrange
         TwitchChatServerImpl server = getTwitchChatServer();
 

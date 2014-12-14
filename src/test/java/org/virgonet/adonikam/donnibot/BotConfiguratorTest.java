@@ -2,6 +2,8 @@ package org.virgonet.adonikam.donnibot;
 
 import org.junit.Test;
 import org.pircbotx.PircBotX;
+import org.virgonet.adonikam.donnibot.config.BotConfig;
+import org.virgonet.adonikam.donnibot.config.BotConfigurator;
 
 import static org.junit.Assert.assertNotNull;
 

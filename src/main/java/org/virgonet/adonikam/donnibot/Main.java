@@ -5,8 +5,11 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.virgonet.adonikam.donnibot.config.TwitchChatServerModule;
+import org.virgonet.adonikam.donnibot.interfaces.TwitchChatServerException;
 import org.virgonet.adonikam.donnibot.interfaces.TwitchChatServer;
 import org.virgonet.adonikam.donnibot.interfaces.TwitchChatServerListener;
+import org.virgonet.adonikam.donnibot.listeners.DonniBot;
 
 @SuppressWarnings("WeakerAccess")
 public class Main {
@@ -24,7 +27,7 @@ public class Main {
             TwitchChatServerListener listener = injector.getInstance(DonniBot.class);
             chatServer.registerListener(listener);
             chatServer.start();
-        } catch (BotException e) {
+        } catch (TwitchChatServerException e) {
             handleFatalError(e);
         }
     }

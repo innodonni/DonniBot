@@ -1,9 +1,10 @@
-package org.virgonet.adonikam.donnibot;
+package org.virgonet.adonikam.donnibot.config;
 
 import com.google.inject.AbstractModule;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.expression.DefaultResolver;
 import org.apache.commons.beanutils.expression.Resolver;
+import org.virgonet.adonikam.donnibot.impl.TwitchChatServerImpl;
 import org.virgonet.adonikam.donnibot.interfaces.TwitchChatServer;
 
 import java.beans.BeanInfo;
@@ -27,22 +28,22 @@ public class TwitchChatServerModule extends AbstractModule {
         bind(TwitchChatServer.class).to(TwitchChatServerImpl.class);
     }
 
-
+    // TODO test and clean up
     private BotConfig getBotConfigFromFiles(String... configFileNames) {
         boolean foundOne = false;
         final BotConfig botConfig = new BotConfig();
-        Properties p = new Properties();
+        Properties propertyCollection = new Properties();
         try {
             for (String fileName : configFileNames) {
                 File file = new File(fileName);
                 if (file.exists()) {
                     foundOne = true;
-                    p.load(new FileInputStream(file));
+                    propertyCollection.load(new FileInputStream(file));
                 }
             }
             if (!foundOne)
                 throw new RuntimeException("No configuration files found.");
-            for(String x : p.stringPropertyNames()) {
+            for(String x : propertyCollection.stringPropertyNames()) {
                 String x1 = x;
                 Resolver r = new DefaultResolver();
                 while (r.hasNested(x1)) {
@@ -52,7 +53,7 @@ public class TwitchChatServerModule extends AbstractModule {
                 PropertyDescriptor[] descriptors = info.getPropertyDescriptors();
                 for (PropertyDescriptor o : descriptors)
                     if (o.getName().equals(x1)) {
-                        Object z = ConvertUtils.convert(p.get(x), o.getPropertyType());
+                        Object z = ConvertUtils.convert(propertyCollection.get(x), o.getPropertyType());
                         o.getWriteMethod().invoke(botConfig, z);
                         break;
                     }
@@ -61,7 +62,7 @@ public class TwitchChatServerModule extends AbstractModule {
                 | IllegalAccessException
                 | InvocationTargetException
                 | IntrospectionException e) {
-            throw new RuntimeException("Failed to load configuration", e);
+            throw new RuntimeException("Failed to load configuration (config/donnibot.properties missing/inaccessible?)", e);
         }
         return botConfig;
     }
