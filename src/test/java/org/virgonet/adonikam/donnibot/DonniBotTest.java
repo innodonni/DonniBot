@@ -7,7 +7,6 @@ import org.pircbotx.PircBotX;
 import org.pircbotx.hooks.events.MessageEvent;
 import org.virgonet.adonikam.donnibot.interfaces.TwitchChatServer;
 import org.virgonet.adonikam.donnibot.interfaces.TwitchChatServerListener;
-import sun.plugin2.message.Message;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
