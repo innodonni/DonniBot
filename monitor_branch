@@ -1,0 +1,39 @@
+#!/bin/sh
+query_every=10
+repo="innodonni/DonniBot"
+branch=$1
+if [ -z "$branch" ]; then
+	branch=$(git rev-parse --abbrev-ref HEAD)
+fi
+
+build_status() {
+	travis history -r "$repo" -b "$branch" --limit 1 2>/dev/null |
+	cut -d":" -f1
+}
+pid_exists() {
+	kill -0 $1 >/dev/null 2>&1
+}
+get_status_with_callback() {
+  build_status | $1
+}
+print_output() {
+  # Read from stdin
+  build_status=$(cat)
+  # Clear screen
+  echo -e "\033[2J"
+  echo -n $build_status
+}
+
+while true; do
+	get_status_with_callback print_output &
+	pid=$!
+	slept=0
+	while pid_exists $pid || [ $slept -lt $query_every ]; do
+		sleep 1
+		slept=$(expr $slept + 1)
+	done
+	# wait for pid in case it took longer than $query_every seconds
+	wait $pid
+done
+
+

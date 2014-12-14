@@ -1,5 +1,6 @@
 package org.virgonet.adonikam.donnibot;
 
+import com.google.common.base.Throwables;
 import org.pircbotx.PircBotX;
 import org.pircbotx.exception.IrcException;
 import org.pircbotx.hooks.Listener;
@@ -29,17 +30,16 @@ public class TwitchChatServerImpl extends ListenerAdapter<PircBotX> implements o
     }
 
     @Override
-    public void start() throws PointlessBotException {
+    public void start() throws BotException {
         if (listener == null)
-            throw new PointlessBotException();
+            throw new BotException("Pointless bot (has no listeners)");
 
-        // TODO Create my own exception type
         try {
             pircBotX.startBot();
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new BotException("Network error", e);
         } catch (IrcException e) {
-            e.printStackTrace();
+            throw new BotException("Underlying bot crashed", e);
         }
     }
 

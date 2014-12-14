@@ -1,5 +1,6 @@
 package org.virgonet.adonikam.donnibot;
 
+import com.google.common.base.Preconditions;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import org.slf4j.Logger;
@@ -23,14 +24,14 @@ public class Main {
             TwitchChatServerListener listener = injector.getInstance(DonniBot.class);
             chatServer.registerListener(listener);
             chatServer.start();
-        } catch (PointlessBotException e) {
+        } catch (BotException e) {
             handleFatalError(e);
         }
     }
 
     void handleFatalError(Throwable throwable) {
-        // TODO test
-//        throwable.printStackTrace();
+        Preconditions.checkNotNull(throwable);
+        throwable.printStackTrace(System.err);
     }
 
 }

@@ -36,6 +36,7 @@ repositories {
 dependencies {
     compile 'org.pircbotx:pircbotx:2.0.1'
     compile 'com.google.inject:guice:3.0'
+    compile 'com.google.guava:guava:15.0'
     compile 'commons-beanutils:commons-beanutils:1.9.2'
 
     runtime 'ch.qos.logback:logback-classic:1.1.2'

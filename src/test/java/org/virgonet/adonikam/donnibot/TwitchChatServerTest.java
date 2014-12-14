@@ -12,7 +12,7 @@ import static org.mockito.Mockito.*;
 
 public class TwitchChatServerTest {
     @Test
-    public void start_WhenCalled_UnderlyingBotIsStarted() throws IOException, IrcException, PointlessBotException {
+    public void start_WhenCalled_UnderlyingBotIsStarted() throws IOException, IrcException, BotException {
         //Arrange
         BotConfigurator botConfigurator = mock(BotConfigurator.class);
         PircBotX bot = mock(PircBotX.class);
@@ -46,8 +46,8 @@ public class TwitchChatServerTest {
     }
 
 
-    @Test(expected=PointlessBotException.class)
-    public void start_noListenersRegistered_throwsException() throws PointlessBotException {
+    @Test(expected=BotException.class)
+    public void start_noListenersRegistered_throwsException() throws BotException {
         //Arrange
         TwitchChatServerImpl server = getTwitchChatServer();
 
