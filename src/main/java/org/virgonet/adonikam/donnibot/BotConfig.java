@@ -2,17 +2,14 @@ package org.virgonet.adonikam.donnibot;
 
 import javax.inject.Named;
 
+@SuppressWarnings("UnusedDeclaration")
 @Named
 public class BotConfig {
-    protected String botName;
-    protected String channelName;
-    protected String serverHostName;
-    protected int serverPort;
-    protected String serverPassword;
-
-    protected BotConfig() {
-
-    }
+    private String botName;
+    private String channelName;
+    private String serverHostName;
+    private int serverPort;
+    private String serverPassword;
 
     public BotConfig(String botName, String channelName, String serverHostName, int serverPort, String serverPassword) {
         this.botName = botName;

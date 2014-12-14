@@ -17,7 +17,7 @@ get_status_with_callback() {
   build_status | $1
 }
 print_output() {
-  # Read from stdin
+  # Await EOF from standard input
   build_status=$(cat)
   # Clear screen
   echo -e "\033[2J"

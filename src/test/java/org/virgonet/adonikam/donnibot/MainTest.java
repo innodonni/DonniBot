@@ -1,6 +1,5 @@
 package org.virgonet.adonikam.donnibot;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.PrintStream;
@@ -19,6 +18,7 @@ public class MainTest {
         //Assert an exception was thrown
     }
 
+    @SuppressWarnings("ThrowableResultOfMethodCallIgnored")
     @Test
     public void handleFatalError_whenPassedThrowable_printsStackTrace() {
         //Arrange

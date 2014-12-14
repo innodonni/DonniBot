@@ -5,9 +5,10 @@ jdk:
 before_script:
   - echo -e "machine github.com\n  login $CI_USER_TOKEN\n  password x-oauth-basic " > ~/.netrc
 
-install: gradle clean --refresh-dependencies
+# Use system gradle and don't assemble during install to speed up build
+install: gradle clean
 
-script: gradle --stacktrace all -Prelease.disableRemoteCheck -Prelease.attachRemote="https://github.com/innodonni/DonniBot.git"
+script: gradle --stacktrace all
 
 branches:
   except:

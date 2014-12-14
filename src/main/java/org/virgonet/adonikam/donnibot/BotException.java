@@ -1,7 +1,6 @@
 package org.virgonet.adonikam.donnibot;
 
-import org.pircbotx.exception.IrcException;
-
+@SuppressWarnings("UnusedDeclaration")
 public class BotException extends Exception {
     public BotException(String message) {
         super(message);

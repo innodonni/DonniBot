@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="EntryPointsManager">
-    <entry_points version="2.0" />
+    <entry_points version="2.0">
+      <entry_point TYPE="class" FQNAME="org.virgonet.adonikam.donnibot.MainTest" />
+      <entry_point TYPE="class" FQNAME="org.virgonet.adonikam.donnibot.TwitchChatServerTest" />
+      <entry_point TYPE="class" FQNAME="org.virgonet.adonikam.donnibot.BotConfiguratorTest" />
+      <entry_point TYPE="class" FQNAME="org.virgonet.adonikam.donnibot.DonniBotTest" />
+      <entry_point TYPE="class" FQNAME="org.virgonet.adonikam.donnibot.TwitchChatServerModule" />
+      <entry_point TYPE="method" FQNAME="org.virgonet.adonikam.donnibot.BotConfigurator BotConfigurator(org.virgonet.adonikam.donnibot.BotConfig botConfig)" />
+    </entry_points>
   </component>
   <component name="MavenProjectsManager">
     <option name="originalFiles">

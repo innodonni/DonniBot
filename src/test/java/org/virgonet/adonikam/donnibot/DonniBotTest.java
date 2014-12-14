@@ -1,6 +1,5 @@
 package org.virgonet.adonikam.donnibot;
 
-import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.pircbotx.PircBotX;
@@ -10,10 +9,8 @@ import org.virgonet.adonikam.donnibot.interfaces.TwitchChatServerListener;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 public class DonniBotTest
 {

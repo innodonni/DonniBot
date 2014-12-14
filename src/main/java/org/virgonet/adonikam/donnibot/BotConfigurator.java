@@ -9,7 +9,7 @@ import javax.inject.Named;
 @Named
 public class BotConfigurator {
 
-    protected BotConfig botConfig;
+    protected final BotConfig botConfig;
 
     @Inject
     public BotConfigurator(BotConfig botConfig) {

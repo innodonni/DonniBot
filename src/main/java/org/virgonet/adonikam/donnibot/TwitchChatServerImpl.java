@@ -1,6 +1,5 @@
 package org.virgonet.adonikam.donnibot;
 
-import com.google.common.base.Throwables;
 import org.pircbotx.PircBotX;
 import org.pircbotx.exception.IrcException;
 import org.pircbotx.hooks.Listener;
