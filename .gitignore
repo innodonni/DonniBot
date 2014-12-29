@@ -4,3 +4,5 @@ out
 .idea/workspace.xml
 .idea/dictionaries/*
 src/main/config/donnibot.properties
+DonniBot.ipr
+DonniBot.iws

@@ -5,11 +5,8 @@ import org.pircbotx.hooks.Event;
 import org.pircbotx.hooks.Listener;
 
 @SuppressWarnings("WeakerAccess")
-public interface TwitchChatServerListener extends Listener<PircBotX> {
-    boolean isEventReceived();
+public interface TwitchChatServerListener {
 
-    String processCommand(String command);
+    String processCommand(String command, String... args);
 
-    @Override
-    void onEvent(Event<PircBotX> event) throws Exception;
 }

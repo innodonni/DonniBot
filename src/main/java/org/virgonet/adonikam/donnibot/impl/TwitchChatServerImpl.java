@@ -1,10 +1,10 @@
 package org.virgonet.adonikam.donnibot.impl;
 
+import org.pircbotx.hooks.types.GenericMessageEvent;
 import org.pircbotx.PircBotX;
 import org.pircbotx.exception.IrcException;
 import org.pircbotx.hooks.Listener;
 import org.pircbotx.hooks.ListenerAdapter;
-import org.pircbotx.hooks.events.MessageEvent;
 import org.virgonet.adonikam.donnibot.config.BotConfigurator;
 import org.virgonet.adonikam.donnibot.interfaces.TwitchChatServerException;
 import org.virgonet.adonikam.donnibot.interfaces.TwitchChatServerListener;
@@ -12,6 +12,7 @@ import org.virgonet.adonikam.donnibot.interfaces.TwitchChatServerListener;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.IOException;
+import java.util.Arrays;
 
 @Named
 public class TwitchChatServerImpl extends ListenerAdapter<PircBotX> implements org.virgonet.adonikam.donnibot.interfaces.TwitchChatServer, Listener<PircBotX> {
@@ -21,6 +22,7 @@ public class TwitchChatServerImpl extends ListenerAdapter<PircBotX> implements o
 
     @Inject
     public TwitchChatServerImpl(BotConfigurator botConfigurator) {
+        botConfigurator.addListener(this);
         this.pircBotX = botConfigurator.createPircBotX();
     }
 
@@ -45,7 +47,17 @@ public class TwitchChatServerImpl extends ListenerAdapter<PircBotX> implements o
     }
 
     @Override
-    public void onMessage(MessageEvent event) throws Exception {
-        listener.processCommand(event.getMessage());
+    public void onGenericMessage(GenericMessageEvent event) throws Exception {
+        String message = event.getMessage();
+        if (message.startsWith("?")) {
+            String[] strings = message.split(" ");
+            String[] args = new String[] {};
+            if (strings.length > 1) {
+                args = Arrays.copyOfRange(strings, 1, strings.length);
+            }
+            String response = listener.processCommand(strings[0].substring(1), args);
+            if (response != null)
+                event.respond(response);
+        }
     }
 }

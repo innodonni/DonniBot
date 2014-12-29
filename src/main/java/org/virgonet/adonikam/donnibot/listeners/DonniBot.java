@@ -1,27 +1,17 @@
 package org.virgonet.adonikam.donnibot.listeners;
 
-import org.pircbotx.PircBotX;
-import org.pircbotx.hooks.Event;
 import org.virgonet.adonikam.donnibot.interfaces.TwitchChatServerListener;
 
 import javax.inject.Named;
 
 @Named
 public class DonniBot implements TwitchChatServerListener {
-    @Override
-    public boolean isEventReceived() {
-        return eventReceived;
-    }
 
     private boolean eventReceived = false;
 
     @Override
-    public String processCommand(String command) {
+    public String processCommand(String commandName, String... args) {
         return "Hello!";
     }
 
-    @Override
-    public void onEvent(Event<PircBotX> event) throws Exception {
-        eventReceived = true;
-    }
 }

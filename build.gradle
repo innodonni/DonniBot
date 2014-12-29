@@ -39,6 +39,12 @@ dependencies {
     compile 'com.google.guava:guava:15.0'
     compile 'commons-beanutils:commons-beanutils:1.9.2'
 
+    compile files('lib/java-sandbox-0.3.jar',
+            'lib/reflective-sandcastle-hardened-java7-0.1.jar',
+            'lib/reflective-sandcastle-java7-0.1.jar',
+            'lib/commons-lang-2.6/common-lang-2.6.jar',
+            'lib/commons-collections-3.2.1/common-collections-3.2.1.jar')
+
     runtime 'ch.qos.logback:logback-classic:1.1.2'
 
     testCompile 'junit:junit:4.11'
